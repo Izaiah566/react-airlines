@@ -1,0 +1,116 @@
+import { useEffect, useState } from "react"
+
+const Airlines = () => {
+    
+    const [userInput, setUserInput] = useState('');
+    const [searchFlight, setSearchFlight] = useState('');
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        const getAirlines = async () => {
+            const url = 'https://my.api.mockaroo.com/flight_logs.json?key=5776e910';
+            const data = await fetch(url).then((response) => response.json());
+            setSearchFlight(data);
+        };
+        getAirlines();
+    }, [setSearchFlight]);
+
+    const handleClick = () => {
+        if (userInput) {
+            
+        } else {
+            setError('Enter a question to display information')
+        }
+    }
+
+    return (
+        <>
+            <h1>Flight Plan Submission</h1>
+            <div className="flightPlanForm">
+                <div className="inputDiv">
+                    <label>Airline: <input type="text" name="aircraftType" className="airline" required/></label>
+                </div>
+                <div className="inputDiv">
+                    <label>Flight Number: <input type="text" name="flightNumber"/></label>
+                </div>
+                <div className="inputDiv">
+                    <label>Departure Airport: <input type="text" name="departureAirport"/></label>
+                </div>
+                <div className="inputDiv">
+                    <label>Arrival Airport: <input type="text" name="arrivalAirport"/></label>
+                </div>
+                <div className="inputDiv">
+                    <label>Departure Date: <input type="date" name="departureDate"/></label>
+                </div>
+                <div className="inputDiv">
+                    <label>Arrival Date: <input type="date" name="arrivalDate"/></label>
+                </div>
+                <div className="inputDiv">
+                    <label>Departure Time: <input type="time" name="departureTime"/></label>
+                </div>
+                <div className="inputDiv">
+                    <label>Arrival Time: <input type="time" name="arrivalTime"/></label>
+                </div>
+                
+                <button type="submit">Submit Flight Plan</button>
+            </div>
+        
+            <h3>Submitted Flight Plan:</h3>
+            <div className="output"></div>
+        </>
+    )
+}
+
+export default Airlines
+
+
+Your current component fetches flight data on mount and has a form for submitting a flight plan, but it’s missing key functionality. Here are some improvements you might consider:
+
+1. **Controlled Inputs:** Right now, your form inputs are uncontrolled. You should use `useState` hooks for each form field to properly handle user input.
+2. **Form Submission Logic:** Your `handleClick` is defined but never used, and there's no actual form submission logic.
+3. **Displaying Submitted Data:** You have an empty `<div className="output"></div>` that doesn't show anything.
+
+Would you like help implementing these improvements?
+
+Prompt 2:
+
+const [userInput, setUserInput] = useState('');
+const [searchFlight, setSearchFlight] = useState([]);
+const [filteredFlights, setFilteredFlights] = useState([]);
+
+useEffect(() => {
+  const getAirlines = async () => {
+    const url = 'https://my.api.mockaroo.com/flight_logs.json?key=5776e910';
+    const data = await fetch(url).then((response) => response.json());
+    setSearchFlight(data);
+  };
+  getAirlines();
+}, []);
+
+useEffect(() => {
+  if (userInput) {
+    const filtered = searchFlight.filter(flight =>
+      flight.airline?.toLowerCase().includes(userInput.toLowerCase())
+    );
+    setFilteredFlights(filtered);
+  } else {
+    setFilteredFlights([]);
+  }
+}, [userInput, searchFlight]);
+
+return (
+  <>
+    <input
+      type="text"
+      value={userInput}
+      onChange={(e) => setUserInput(e.target.value)}
+      placeholder="Search by airline"
+    />
+
+    <ul>
+      {filteredFlights.map((flight, index) => (
+        <li key={index}>{flight.airline} - {flight.flight_number}</li>
+      ))}
+    </ul>
+  </>
+);

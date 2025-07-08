@@ -16,6 +16,7 @@
 body {
     text-align: center;
     background-color: lightcyan;
+    min-height: calc(100vh);
 }
 
 .flightPlanForm {
@@ -41,8 +42,18 @@ input:focus, select:focus, textarea:focus {
     outline: none;
 }
 
+.inputDiv {
+  padding: 15px;
+  margin: 10px;
+}
+
 h1 {
   color: black;
+}
+
+li {
+  color: black;
+  list-style-type: none;
 }
 
 h3 {
@@ -74,6 +85,7 @@ button {
   table, td {
     border: 1px solid black;
     padding: 0.9rem;
+    color: #242424;
 }
 
   th {
